@@ -42,7 +42,6 @@ void setup() {
   Serial.begin(115200);
   pinMode(PWMpin,INPUT);
   attachInterrupt(digitalPinToInterrupt(PWMpin), rev_count, FALLING);  //when PWM goes from 4095 to 0 meaning from HIGH to LOW, ISR is called
-  ledcSetup(ledc_channel.channel, 10000, 12);
   Serial.println("Enter desired RPM, Press ENTER");
   
   while (Serial.available() == 0) {  // Wait for input
