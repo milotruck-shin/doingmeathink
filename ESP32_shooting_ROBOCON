@@ -5,8 +5,8 @@
 #include "driver/ledc.h"
 
 int PWMval;
-int PWMpin=32;
-int motorPWM = 21;
+int motorPWM = 32; //to write to motor driver PWM signal
+int readPWM = 33;  //to read PWM from AS5600
 
 //PID variables 
 double KP=1;
@@ -50,8 +50,9 @@ void setup() {
   ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer)); // Configure PWM timer
   ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel)); // Initialize the LEDC channel
   Serial.begin(115200);
-  pinMode(PWMpin,INPUT);
-  attachInterrupt(digitalPinToInterrupt(PWMpin), rev_count, FALLING);  //when PWM goes from 4095 to 0 meaning from HIGH to LOW, ISR is called
+  pinMode(readPWM,INPUT);
+  pinMode(motorPWM,OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(readPWM), rev_count, FALLING);  //when PWM goes from 4095 to 0 meaning from HIGH to LOW, ISR is called
   Serial.println("Enter desired RPM, Press ENTER");
   
   while (Serial.available() == 0) {  // Wait for input
@@ -87,7 +88,8 @@ void compute_RPM(){
   revolution=0; //reset the value of revolutions made
   error = setpoint_RPM-RPM;
   taskEXIT_CRITICAL(&my_spinlock);
-  Serial.println(RPM); // check at serial plotter
+  Serial.println(RPM);
+  Serial.println(setpoint_RPM);  //check these 2 at serial plotter
 }
 
 void PID_control(){
@@ -99,5 +101,4 @@ void PID_control(){
   if (PWMval >= 4095){
     PWMval=4095;
   }
- 
 }
