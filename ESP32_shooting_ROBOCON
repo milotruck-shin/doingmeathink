@@ -5,8 +5,8 @@
 #include "driver/ledc.h"
 
 int PWMval;
-int motorPWM = 32; //to write to motor driver PWM signal
-int readPWM = 33;  //to read PWM from AS5600
+int motorPWM = 32;
+int readPWM = 33;
 
 //PID variables 
 double KP=1;
